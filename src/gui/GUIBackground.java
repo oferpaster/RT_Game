@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -18,10 +19,14 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private Pad p;
 	private Graphics g;
 	private int hpanel,wpanel;
-	private int count=0;
+	private ImageIcon iconmagepad;
+	
 	public GUIBackground(){
 		p=new Pad(450,500);
+		iconmagepad=new ImageIcon("pad.png");
 		invokeInItWindow();
+		addKeyListener(new AL());
+		setFocusable(true);
 		time=new Timer(5,this);
 		time.start();
 	}
@@ -52,22 +57,20 @@ public class GUIBackground extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		p.move();
 		repaint();
 	}
 	
 	public void paintComponent( Graphics g ){
 		hpanel=mainpanel.getHeight();
 		wpanel=mainpanel.getWidth();
-		
-		
 		g.setColor( Color.BLACK );
 		g.drawLine(0,75, wpanel,75);
-		g.setColor(Color.red);
-		g.drawRect(p.getX(),p.getY(), 100,30);
-		g.setColor(Color.red);
-		g.fillRect(p.getX(),p.getY(),100,30);
 		
-	     
+		g.drawImage(iconmagepad.getImage(),300,300,null);
+		
+		
+		
 	}
 	
 	private class AL extends KeyAdapter{
