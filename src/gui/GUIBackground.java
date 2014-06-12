@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -16,21 +17,28 @@ import javax.swing.*;
 
 
 public class GUIBackground extends JPanel implements ActionListener{
-
+	
 	private static final long serialVersionUID = 1L;
 	private JFrame mainframe;
 	private JPanel mainpanel;
 	private Timer time;
 	private Pad p;
 	private Ball b;
+	ArrayList<Target> targets;
 	private int hpanel;
 	public int wpanel;
 	private ImageIcon iconmagepad;
+	private ImageIcon iconmagetarget;
+	private int levelNumber;
+	
 
 	public GUIBackground(int x){}
 	
 	public GUIBackground(){
-		iconmagepad=new ImageIcon("C:\\Users\\GAL\\git\\RT_Game2\\src\\gui\\pad.png");
+		levelNumber = 1;
+		targets = new ArrayList<Target>();
+		iconmagepad=new ImageIcon("src\\gui\\pad.png");
+		createTarget();
 		invokeInItWindow();
 		p=new Pad(450,540);
 		b=new Ball(480,530,p,this);
@@ -63,6 +71,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		mainframe.getContentPane().add(mainpanel,BorderLayout.CENTER);
 		mainframe.pack();
 		mainframe.setVisible(true);
+		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -78,14 +87,49 @@ public class GUIBackground extends JPanel implements ActionListener{
 		g.setColor( Color.BLACK );
 		g.drawLine(0,75, wpanel,75);
 		g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
+		paintTargets(g);
 		g.setColor(Color.WHITE);
 		g.setColor(Color.ORANGE);
+		b.targetCollision(targets);
 		g.drawOval(b.getX(), b.getY(),10, 10);
 		g.fillOval(b.getX(), b.getY(),10, 10);
 	}
 	
 	
+	public void createTarget() {
+		Target target = new Target(10,100);
+		target.setAlive(true);
+		target.setHit(false);
+		targets.add(target);
+		switch (levelNumber) {
+		case 1:
+			for(int i = 1; i<8 ; i++){
+				target = new Target(i*115,100);
+				target.setAlive(true);
+				target.setHit(false);
+				targets.add(target);
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
 	
+	public void paintTargets(Graphics g) {
+		switch (levelNumber) {
+		case 1:
+			for (Target target : targets) {
+				if(target.isAlive() && !target.isHit()){
+					g.drawImage(target.getImage(),target.getX(),target.getY(),null);
+				}
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
 	
 	
 	private class AL extends KeyAdapter{

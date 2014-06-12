@@ -1,4 +1,8 @@
 package gui;
+
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
 import enums.Sides;
 
 public class Ball{
@@ -39,10 +43,10 @@ public class Ball{
 			}
 			
 			else{
-				dx=0;
-				dy=1;
-				x=x+dx;
-				y=y+dy;
+			dx=0;
+			dy=1;
+			x=x+dx;
+			y=y+dy;
 			}
 		}
 		
@@ -91,7 +95,6 @@ public class Ball{
 		}
 		
 		
-		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
 			System.out.println(prevWall+" "+currWall+" "+1);
 			if(prevWall==Sides.DOWN){
 			dx=-1;
@@ -101,10 +104,10 @@ public class Ball{
 			}
 			
 			else{
-			dx=-1;
-			dy=-1;
-			x=x+dx;
-			y=y+dy;
+			dx = -1;
+			dy = -1;
+			 x = x+dx;
+			 y = y+dy;
 			}
 		}
 		
@@ -119,16 +122,16 @@ public class Ball{
 			}
 			
 			else{
-			dx=1;
-			dy=-1;
-			x=x+dx;
-			y=y+dy;
+			dx = 1;
+			dy = -1;
+			x = x+dx;
+			y = y+dy;
 			}
 		}
 		
 		else{
-		x=x+dx;
-		y=y+dy;
+			x=x+dx;
+			y=y+dy;
 		}
 	}
 	
@@ -172,20 +175,33 @@ public class Ball{
 		return Sides.DO_NOTHING;
 	}
 	
-	public Sides wallCollision(int x,int y){
+	public void wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.LEFT;
-			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.RIGHT;
-			return Sides.LEFT_WEEK;
 		}
 		
-		return Sides.DO_NOTHING;
+		//return Sides.DO_NOTHING;
+	}
+	
+	public void targetCollision(ArrayList<Target> targets){
+		for (Target target : targets) {
+			if(target.getRectangle().intersects(this.getRectangle())){
+				target.setHit(true);
+				dy= dy*(-1);
+				dx= dx*(-1);
+				break;
+			}
+		}
+	}
+	
+	public Rectangle getRectangle(){
+		return new Rectangle(getX(),getY(),10,10);
 	}
 }
