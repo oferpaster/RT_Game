@@ -6,6 +6,7 @@ public class Pad {
 	
 	private int x,dx,y,dy;
 	
+	public Pad(){}
 	
 	public Pad(int x,int y){
 		this.x=x;
@@ -26,7 +27,26 @@ public class Pad {
 	}
 	
 	public void keyPressed(KeyEvent e){
+		int key=e.getKeyCode(); 	
 		
+		if(key==KeyEvent.VK_LEFT){
+			
+			if(getX()>=5)
+				dx=-1;
+			else
+				dx=0;
+		}
+		
+			
+		if(key==KeyEvent.VK_RIGHT){
+			
+			if(getX()<=810)
+				dx=1;
+			
+			else
+				dx=0;
+		}
+			
 	}
 	
 	public void keyReleased(KeyEvent e){
