@@ -30,10 +30,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 	public GUIBackground(int x){}
 	
 	public GUIBackground(){
-		p=new Pad(450,540);
-		b=new Ball(480,530,p,this);
 		iconmagepad=new ImageIcon("C:\\Users\\GAL\\git\\RT_Game2\\src\\gui\\pad.png");
 		invokeInItWindow();
+		p=new Pad(450,540);
+		b=new Ball(480,530,p,this);
 		addKeyListener(new AL());
 		setFocusable(true);
 		time=new Timer(5,this);
