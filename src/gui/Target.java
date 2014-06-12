@@ -16,6 +16,7 @@ public class Target extends ImageIcon {
 	private int y;
 	private boolean hit;
 	private boolean alive;
+	private boolean moving;
 	
 	public Target(int x, int y) {
 		super(imageStr);
