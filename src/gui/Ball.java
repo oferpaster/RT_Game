@@ -1,13 +1,16 @@
 package gui;
 import enums.Sides;
+
 public class Ball{
 	
 	private int x,y,dx,dy=-1;
 	private GUIBackground g;
 	private Pad p;
+	private Sides currWall=Sides.DOWN,prevWall;
 	
 	public Ball(int x,int y,Pad p,GUIBackground g){
 		this.g=g;
+		this.g.wpanel=884;
 		this.p=p;
 		this.x=x;
 		this.y=y;
@@ -16,11 +19,40 @@ public class Ball{
 	public void move(){
 		
 		if(celingCollision(getX(),getY())){
-		dx=0;
-		dy=1;
-		x=x+dx;
-		y=y+dy;
+		
+			if(currWall==Sides.LEFT){
+				dx=1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				prevWall=currWall;
+				currWall=Sides.DOWN;
+			}
+			
+			else if(currWall==Sides.RIGHT){
+				dx=-1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				prevWall=currWall;
+				currWall=Sides.DOWN;
+			}
+			
+			else{
+				dx=0;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+			}
 		}
+		
+		else if(getX()>g.wpanel){
+			x=g.wpanel;
+		}
+		
+		else if(getX()<0)
+			x=0;
+			
 		
 		if(padCollision(getX(),getY())==Sides.LEFT_HARD){
 			dx=-2;
@@ -51,18 +83,47 @@ public class Ball{
 			y=y+dy;
 		}
 		
-		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
-			dx=-1;
+		else if(padCollision(getX(),getY())==Sides.UP){
+			dx=0;
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
 		}
 		
+		
+		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
+			System.out.println(prevWall+" "+currWall+" "+1);
+			if(prevWall==Sides.DOWN){
+			dx=-1;
+			dy=1;
+			x=x+dx;
+			y=y+dy;	
+			}
+			
+			else{
+			dx=-1;
+			dy=-1;
+			x=x+dx;
+			y=y+dy;
+			}
+		}
+		
 		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
+			System.out.println(prevWall+" "+currWall+" "+2);
+				
+			if(prevWall==Sides.DOWN){
+			dx=1;
+			dy=1;
+			x=x+dx;
+			y=y+dy;
+			}
+			
+			else{
 			dx=1;
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
+			}
 		}
 		
 		else{
@@ -87,34 +148,43 @@ public class Ball{
 	}
 	
 	public Sides padCollision(int x,int y){
-		System.out.println(p.getX()+" "+p.getY()+" "+getX()+" "+getY());
+		
 		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14)
 			return Sides.LEFT_HARD;
+
 		
 		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14)
 			return Sides.LEFT_WEEK;
 		
-		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14){
-			System.out.println("success");
+		
+		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14)
 			return Sides.UP;
-		}
+		
 		
 		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14)
-			return Sides.RIGHT_HARD;
+			return Sides.RIGHT_WEEK;
+		
 		
 		else if(x>=p.getX()+52 && x<=p.getX()+65 && y==p.getY()+14)
-			return Sides.RIGHT_WEEK;
+			return Sides.RIGHT_HARD;
+		
 		
 		return Sides.DO_NOTHING;
 	}
 	
 	public Sides wallCollision(int x,int y){
-		
-		if(x==0 && y<=540 && y>=75)
+	
+		if(x==0 && y<=540 && y>=75){
+			prevWall=currWall;
+			currWall=Sides.LEFT;
 			return Sides.RIGHT_WEEK;
+		}
 		
-		else if(x==75 && y<=540 && y>=75)
+		else if(x==g.wpanel && y<=540 && y>=75){
+			prevWall=currWall;
+			currWall=Sides.RIGHT;
 			return Sides.LEFT_WEEK;
+		}
 		
 		return Sides.DO_NOTHING;
 	}
