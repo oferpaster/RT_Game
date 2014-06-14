@@ -6,14 +6,15 @@ import enums.Sides;
 
 public class Ball{
 	
-	private int x,y,dx,dy=-1,celinf_flag,pad_flag;
+	private int x,y,dx,dy=-1,celing_flag,pad_flag;
 	private GUIBackground g;
 	private Pad p;
-	private Sides currWall=Sides.DOWN,prevWall;
+	private Sides currWall=Sides.DOWN,curr_pad_position;
 	
 	public Ball(int x,int y,Pad p,GUIBackground g){
 		this.g=g;
 		this.g.wpanel=884;
+		this.g.hpanel=562;
 		this.p=p;
 		this.x=x;
 		this.y=y;
@@ -28,7 +29,7 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				celinf_flag=1;
+				celing_flag=1;
 				pad_flag=0;
 				currWall=Sides.DOWN;
 			}
@@ -38,18 +39,54 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				celinf_flag=1;
+				celing_flag=1;
 				pad_flag=0;
 				currWall=Sides.DOWN;
 			}
 			
-			else{
+			else if(currWall==Sides.DOWN){
 				dx=0;
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				currWall=Sides.DOWN;
 			}
+			
+			else if(curr_pad_position==Sides.LEFT_HARD){
+				dx=-2;
+				dy=-1;
+				x=x+dx;
+				y=y+dy;
+			}
+			
+			else if(curr_pad_position==Sides.LEFT_WEEK){
+				dx=-1;
+				dy=-1;
+				x=x+dx;
+				y=y+dy;
+			}
+			
+			else if(curr_pad_position==Sides.RIGHT_WEEK){
+				dx=1;
+				dy=-1;
+				x=x+dx;
+				y=y+dy;
+			}
+				
+
+			else if(curr_pad_position==Sides.RIGHT_HARD){
+				dx=2;
+				dy=-1;
+				x=x+dx;
+				y=y+dy;
+			}
+			
+			else if(curr_pad_position==Sides.DOWN){
+				dx=0;
+				dy*=-1;
+				x=x+dx;
+				y=y+dy;
+			}
+			
 		}
 		
 		else if(getX()>g.wpanel){
@@ -66,7 +103,8 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.LEFT_HARD;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.LEFT_WEEK){
@@ -75,7 +113,8 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.LEFT_WEEK;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.RIGHT_WEEK){
@@ -84,7 +123,8 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.RIGHT_WEEK;
 		}
 			
 
@@ -94,7 +134,8 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.RIGHT_HARD;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.UP){
@@ -103,13 +144,14 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.DOWN;
 		}
 		
 		
 		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
-			if(celinf_flag==1){
-			System.out.println("celinf_flag"+" "+1);
+			
+			if(celing_flag==1){
 			dx=-1;
 			dy=1;
 			x=x+dx;
@@ -117,7 +159,6 @@ public class Ball{
 			}
 			
 			else{
-			System.out.println("pad_flag"+" "+1);
 			dx=-1;
 			dy=-1;
 			x=x+dx;
@@ -127,7 +168,7 @@ public class Ball{
 		
 		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
 				
-			if(celinf_flag==1){
+			if(celing_flag==1){
 			dx=1;
 			dy=1;
 			x=x+dx;
@@ -191,13 +232,11 @@ public class Ball{
 	public Sides wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
-			prevWall=currWall;
 			currWall=Sides.LEFT;
 			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
-			prevWall=currWall;
 			currWall=Sides.RIGHT;
 			return Sides.LEFT_WEEK;
 		}
@@ -216,6 +255,13 @@ public class Ball{
 		}
 	}
 	
+	public boolean floorCollision(int y){
+		
+		if(y==g.hpanel)
+			return true;
+		
+		return false;
+	}
 	public Rectangle getRectangle(){
 		return new Rectangle(getX(),getY(),10,10);
 	}

@@ -25,8 +25,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private Pad p;
 	private Ball b;
 	ArrayList<Target> targets;
-	private int hpanel;
-	public int wpanel;
+	public int wpanel,hpanel;
 	private ImageIcon iconmagepad;
 	private ImageIcon iconmagetarget;
 	private int levelNumber;
@@ -72,6 +71,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		mainframe.pack();
 		mainframe.setVisible(true);
 		
+		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -86,6 +86,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 		wpanel=mainpanel.getWidth();
 		g.setColor( Color.BLACK );
 		g.drawLine(0,75, wpanel,75);
+		if(b.floorCollision(b.getY()))
+			g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
+		
 		g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
 		paintTargets(g);
 		g.setColor(Color.WHITE);
