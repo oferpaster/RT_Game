@@ -19,6 +19,8 @@ import javax.swing.*;
 public class GUIBackground extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
+	private static final int RIGHT = 1;
+	private static final int LEFT = -1;
 	private JFrame mainframe;
 	private JPanel mainpanel;
 	private Timer time;
@@ -109,6 +111,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 				target.setHit(false);
 				targets.add(target);
 			}
+			target = new Target(10,150,true);
+			target.setAlive(true);
+			target.setHit(false);
+			targets.add(target);
 			break;
 
 		default:
@@ -122,6 +128,13 @@ public class GUIBackground extends JPanel implements ActionListener{
 			for (Target target : targets) {
 				if(target.isAlive() && !target.isHit()){
 					g.drawImage(target.getImage(),target.getX(),target.getY(),null);
+					if(target.isMoving()){
+						target.setX(target.getX()+target.getDirection());
+						if(target.getX()+61 >= wpanel || target.getX() <= 0){
+							target.setDirection(target.getDirection()*(-1));
+							target.setX(target.getX()+target.getDirection()*8);
+						}
+					}
 				}
 			}
 			break;
@@ -130,6 +143,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 			break;
 		}
 	}
+	
 	
 	
 	private class AL extends KeyAdapter{

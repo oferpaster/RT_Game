@@ -105,9 +105,9 @@ public class Ball{
 			pad_flag=1;
 			celinf_flag=0;
 		}
-		
-		
 		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
+		
+			//System.out.println(prevWall+" "+currWall+" "+1);
 			if(celinf_flag==1){
 			System.out.println("celinf_flag"+" "+1);
 			dx=-1;
@@ -124,29 +124,31 @@ public class Ball{
 			y=y+dy;
 			}
 		}
-		
-		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
+			else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
+				//System.out.println(prevWall+" "+currWall+" "+2);
+					
+				if(prevWall==Sides.DOWN){
+				dx=1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				}
 				
-			if(celinf_flag==1){
-			dx=1;
-			dy=1;
-			x=x+dx;
-			y=y+dy;
+				else{
+				dx = 1;
+				dy = -1;
+				x = x+dx;
+				y = y+dy;
+				}
 			}
 			
-			else {
-			dx=1;
-			dy=-1;
-			x=x+dx;
-			y=y+dy;
+			else{
+				x=x+dx;
+				y=y+dy;
 			}
-		}
-		
-		else{
-		x=x+dx;
-		y=y+dy;
-		}
 	}
+		
+		
 	
 	public int getX(){
 		return x;
@@ -207,12 +209,14 @@ public class Ball{
 	
 	public void targetCollision(ArrayList<Target> targets){
 		for (Target target : targets) {
-			if(target.getRectangle().intersects(this.getRectangle())){
-				target.setHit(true);
-				dy= dy*(-1);
-				dx= dx*(-1);
-				break;
-			}
+			if(target.isAlive() && !target.isHit())
+				if(target.getRectangle().intersects(this.getRectangle())){
+					target.setHit(true);
+					target.setAlive(false);
+					dy= dy*(-1);
+					dx= dx*(-1);
+					break;
+				}
 		}
 	}
 	
