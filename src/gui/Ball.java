@@ -208,17 +208,23 @@ public void move(){
 		return Sides.DO_NOTHING;
 	}
 	
-	public void targetCollision(ArrayList<Target> targets){
+	public Sides targetCollision(ArrayList<Target> targets){
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
-					target.setHit(true);
-					target.setAlive(false);
+					target.setNumberOfHit(target.getNumberOfHit() - 1);
+					if(target.getNumberOfHit() == 0){
+						target.setHit(true);
+						target.setAlive(false);
+					}
 					dy= dy*(-1);
 					dx= dx*(-1);
-					break;
+					Sides targetStatus = target.getTargetType();
+					targets.remove(target);
+					return targetStatus;
 				}
 		}
+		return Sides.NO_HIT;
 	}
 	
 	public Rectangle getRectangle(){
