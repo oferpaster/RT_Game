@@ -108,7 +108,6 @@ public class Ball{
 		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
 		
 			//System.out.println(prevWall+" "+currWall+" "+1);
-			if(celinf_flag==1){
 			System.out.println("celinf_flag"+" "+1);
 			dx=-1;
 			dy=1;
