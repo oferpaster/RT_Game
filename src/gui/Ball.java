@@ -1,5 +1,4 @@
 package gui;
-
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -7,7 +6,7 @@ import enums.Sides;
 
 public class Ball{
 	
-	private int x,y,dx,dy=-1;
+	private int x,y,dx,dy=-1,celinf_flag,pad_flag;
 	private GUIBackground g;
 	private Pad p;
 	private Sides currWall=Sides.DOWN,prevWall;
@@ -29,7 +28,8 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				prevWall=currWall;
+				celinf_flag=1;
+				pad_flag=0;
 				currWall=Sides.DOWN;
 			}
 			
@@ -38,15 +38,17 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				prevWall=currWall;
+				celinf_flag=1;
+				pad_flag=0;
 				currWall=Sides.DOWN;
 			}
 			
 			else{
-			dx=0;
-			dy=1;
-			x=x+dx;
-			y=y+dy;
+				dx=0;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				currWall=Sides.DOWN;
 			}
 		}
 		
@@ -63,6 +65,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
+			pad_flag=1;
+			celinf_flag=0;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.LEFT_WEEK){
@@ -70,6 +74,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
+			pad_flag=1;
+			celinf_flag=0;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.RIGHT_WEEK){
@@ -77,6 +83,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
+			pad_flag=1;
+			celinf_flag=0;
 		}
 			
 
@@ -85,18 +93,23 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
+			pad_flag=1;
+			celinf_flag=0;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.UP){
 			dx=0;
-			dy=-1;
+			dy*=-1;
 			x=x+dx;
 			y=y+dy;
+			pad_flag=1;
+			celinf_flag=0;
 		}
 		
 		
-			System.out.println(prevWall+" "+currWall+" "+1);
-			if(prevWall==Sides.DOWN){
+		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
+			if(celinf_flag==1){
+			System.out.println("celinf_flag"+" "+1);
 			dx=-1;
 			dy=1;
 			x=x+dx;
@@ -104,34 +117,34 @@ public class Ball{
 			}
 			
 			else{
-			dx = -1;
-			dy = -1;
-			 x = x+dx;
-			 y = y+dy;
+			System.out.println("pad_flag"+" "+1);
+			dx=-1;
+			dy=-1;
+			x=x+dx;
+			y=y+dy;
 			}
 		}
 		
 		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
-			System.out.println(prevWall+" "+currWall+" "+2);
 				
-			if(prevWall==Sides.DOWN){
+			if(celinf_flag==1){
 			dx=1;
 			dy=1;
 			x=x+dx;
 			y=y+dy;
 			}
 			
-			else{
-			dx = 1;
-			dy = -1;
-			x = x+dx;
-			y = y+dy;
+			else {
+			dx=1;
+			dy=-1;
+			x=x+dx;
+			y=y+dy;
 			}
 		}
 		
 		else{
-			x=x+dx;
-			y=y+dy;
+		x=x+dx;
+		y=y+dy;
 		}
 	}
 	
@@ -175,19 +188,21 @@ public class Ball{
 		return Sides.DO_NOTHING;
 	}
 	
-	public void wallCollision(int x,int y){
+	public Sides wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.LEFT;
+			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.RIGHT;
+			return Sides.LEFT_WEEK;
 		}
 		
-		//return Sides.DO_NOTHING;
+		return Sides.DO_NOTHING;
 	}
 	
 	public void targetCollision(ArrayList<Target> targets){
