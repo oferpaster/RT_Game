@@ -19,7 +19,7 @@ public class Ball{
 		this.y=y;
 	}
 	
-	public void move(){
+public void move(){
 		
 		if(celingCollision(getX(),getY())){
 		
@@ -105,9 +105,10 @@ public class Ball{
 			pad_flag=1;
 			celinf_flag=0;
 		}
-		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
 		
-			//System.out.println(prevWall+" "+currWall+" "+1);
+		
+		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
+			if(celinf_flag==1){
 			System.out.println("celinf_flag"+" "+1);
 			dx=-1;
 			dy=1;
@@ -123,29 +124,30 @@ public class Ball{
 			y=y+dy;
 			}
 		}
-			else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
-				//System.out.println(prevWall+" "+currWall+" "+2);
-					
-				if(prevWall==Sides.DOWN){
-				dx=1;
-				dy=1;
-				x=x+dx;
-				y=y+dy;
-				}
+		
+		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
 				
-				else{
-				dx = 1;
-				dy = -1;
-				x = x+dx;
-				y = y+dy;
-				}
+			if(celinf_flag==1){
+			dx=1;
+			dy=1;
+			x=x+dx;
+			y=y+dy;
 			}
 			
-			else{
-				x=x+dx;
-				y=y+dy;
+			else {
+			dx=1;
+			dy=-1;
+			x=x+dx;
+			y=y+dy;
 			}
+		}
+		
+		else{
+		x=x+dx;
+		y=y+dy;
+		}
 	}
+			
 		
 		
 	

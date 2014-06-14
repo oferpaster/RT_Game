@@ -92,7 +92,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		paintTargets(g);
 		g.setColor(Color.WHITE);
 		g.setColor(Color.ORANGE);
-		//b.targetCollision(targets);
+		b.targetCollision(targets);
 		g.drawOval(b.getX(), b.getY(),10, 10);
 		g.fillOval(b.getX(), b.getY(),10, 10);
 	}
