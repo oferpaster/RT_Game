@@ -93,9 +93,9 @@ public class Ball{
 			x=x+dx;
 			y=y+dy;
 		}
+		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
 		
-		
-			System.out.println(prevWall+" "+currWall+" "+1);
+			//System.out.println(prevWall+" "+currWall+" "+1);
 			if(prevWall==Sides.DOWN){
 			dx=-1;
 			dy=1;
@@ -110,30 +110,31 @@ public class Ball{
 			 y = y+dy;
 			}
 		}
-		
-		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
-			System.out.println(prevWall+" "+currWall+" "+2);
+			else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
+				//System.out.println(prevWall+" "+currWall+" "+2);
+					
+				if(prevWall==Sides.DOWN){
+				dx=1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				}
 				
-			if(prevWall==Sides.DOWN){
-			dx=1;
-			dy=1;
-			x=x+dx;
-			y=y+dy;
+				else{
+				dx = 1;
+				dy = -1;
+				x = x+dx;
+				y = y+dy;
+				}
 			}
 			
 			else{
-			dx = 1;
-			dy = -1;
-			x = x+dx;
-			y = y+dy;
+				x=x+dx;
+				y=y+dy;
 			}
-		}
-		
-		else{
-			x=x+dx;
-			y=y+dy;
-		}
 	}
+		
+		
 	
 	public int getX(){
 		return x;
@@ -175,29 +176,33 @@ public class Ball{
 		return Sides.DO_NOTHING;
 	}
 	
-	public void wallCollision(int x,int y){
+	public Sides wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.LEFT;
+			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
 			prevWall=currWall;
 			currWall=Sides.RIGHT;
+			return Sides.LEFT_WEEK;
 		}
 		
-		//return Sides.DO_NOTHING;
+		return Sides.DO_NOTHING;
 	}
 	
 	public void targetCollision(ArrayList<Target> targets){
 		for (Target target : targets) {
-			if(target.getRectangle().intersects(this.getRectangle())){
-				target.setHit(true);
-				dy= dy*(-1);
-				dx= dx*(-1);
-				break;
-			}
+			if(target.isAlive() && !target.isHit())
+				if(target.getRectangle().intersects(this.getRectangle())){
+					target.setHit(true);
+					target.setAlive(false);
+					dy= dy*(-1);
+					dx= dx*(-1);
+					break;
+				}
 		}
 	}
 	
