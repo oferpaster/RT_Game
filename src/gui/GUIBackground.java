@@ -16,6 +16,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
 	private static final String targetImageStr = "src\\gui\\targes.png";
+	private static final String hardTargetImageStr = "src\\gui\\targesHard.png";
 	private static final String fireTargetImageStr = "src\\gui\\targesFire.png";
 	private JFrame mainframe;
 	private JPanel mainpanel;
@@ -28,8 +29,8 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private ImageIcon iconmageFirePad;
 	private ArrayList<Gun> guns;
 	private Level[] levels;
-	private JLabel lblLives;
-	private JLabel lblShoots;
+	private JLabel wonLabel;
+	private Sides gameStat;
 	private JLabel lblTime;
 	private JLabel lblLevel; 
 	
@@ -50,6 +51,14 @@ public class GUIBackground extends JPanel implements ActionListener{
 		addKeyListener(new AL());
 		setFocusable(true);
 		time=new Timer(5,this);
+		setLayout(null);
+		
+		wonLabel = new JLabel("You won level " + Level.getCurrentLevel());
+		wonLabel.setForeground(UIManager.getColor("ComboBox.selectionBackground"));
+		wonLabel.setFont(new Font("Tahoma", Font.BOLD, 67));
+		wonLabel.setBounds(168, 225, 542, 105);
+		wonLabel.setVisible(false);
+		add(wonLabel);
 		time.start();
 		new Game_Time(3,lblTime);
 	
@@ -110,6 +119,7 @@ setLayout(null);
 		mainframe.getContentPane().add(mainpanel,BorderLayout.CENTER);
 		mainframe.pack();
 		mainframe.setVisible(true);
+		gameStat = Sides.GAME_NORMAL;
 	}
 	
 	private void initLevels(){
@@ -117,17 +127,22 @@ setLayout(null);
 		levels[0] = new Level(1);
 		levels[1] = new Level(2);
 		levels[2] = new Level(3);
-		
-		levels[0].setGunBonus(1);
-		levels[0].setNumberOfTargets(8);
-		levels[0].setHaveMovingTarget(1);
 		Level.setCurrentLevel(1);
 		
-		levels[1].setGunBonus(2);
-		levels[1].setNumberOfTargets(9);
+		//levels[0].setGunBonus(1);
+		levels[0].setNumberOfTargets(1);
+		levels[0].setPlay(true);
+		//levels[0].setHaveMovingTarget(1);
+		levels[0].setHitToBreakTarget(1);
 		
-		levels[2].setGunBonus(9);
-		levels[2].setNumberOfTargets(10);
+		levels[1].setGunBonus(2);
+		levels[1].setNumberOfTargets(10);
+		levels[1].setHitToBreakTarget(2);
+		
+		levels[2].setGunBonus(6);
+		levels[2].setNumberOfTargets(11);
+		levels[2].setHitToBreakTarget(2);
+		levels[2].setHaveMovingTarget(1);
 		
 		
 		
@@ -140,8 +155,22 @@ setLayout(null);
 	}
 	
 	public void paintComponent( Graphics g ){
-		Sides ballCollisionResult;
 		super.paintComponent(g);
+		Sides ballCollisionResult;
+		if(gameStat == Sides.GAME_WON_LEVEL){
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			wonLabel.setVisible(false);
+			Level.setCurrentLevel(Level.getCurrentLevel() + 1);
+			levels[Level.getCurrentLevel()-1].setPlay(true);
+			targets.clear();
+			createTarget();
+			gameStat = Sides.GAME_NORMAL;
+		}
 		hpanel=mainpanel.getHeight();
 		wpanel=mainpanel.getWidth();
 		g.setColor( Color.BLACK );
@@ -162,6 +191,25 @@ setLayout(null);
 		ballCollisionResult = b.targetCollision(targets);
 		g.drawOval(b.getX(), b.getY(),10, 10);
 		g.fillOval(b.getX(), b.getY(),10, 10);
+		if(ballCollisionResult != Sides.NO_HIT){
+			levels[Level.getCurrentLevel()-1].setTargetsToWin(levels[Level.getCurrentLevel()-1].getTargetsToWin() - 1);
+			if(levels[Level.getCurrentLevel()-1].getTargetsToWin() == 0 && Level.getCurrentLevel() != 3){
+				levels[Level.getCurrentLevel()-1].setPlay(false);
+				levels[Level.getCurrentLevel()-1].setWon(true);
+				if(Level.getCurrentLevel() != 3)
+					wonLabel.setText("You won level " + Level.getCurrentLevel());
+				else
+					wonLabel.setText("You Won The Game!");
+				wonLabel.setVisible(true);
+				gameStat = Sides.GAME_WON_LEVEL;
+				b.resetBall();
+				p.resetPad();
+			}
+			else if(levels[Level.getCurrentLevel()-1].getTargetsToWin() == 0 && Level.getCurrentLevel() == 3){
+				levels[Level.getCurrentLevel()-1].setPlay(false);
+				levels[Level.getCurrentLevel()-1].setWon(true);
+			}
+		}
 		if(ballCollisionResult == Sides.GUN_TARGET){
 			p.setStatus(Sides.FIRE_PAD);
 			Gun.setEnable(true);
@@ -193,6 +241,8 @@ setLayout(null);
 					gun.setY(p.getY());
 					gun.setFireStatus(Sides.BOLET_FIRED);
 					Gun.setFireLeft(Gun.getFireLeft()-1);
+					if(Gun.getFireLeft() == 0)
+						p.setStatus(Sides.NORMAL_PAD);
 				}
 			}
 			if(gun.getFireStatus() == Sides.BOLET_FIRED){
@@ -214,7 +264,9 @@ setLayout(null);
 	public void createTarget() {
 		int i = Level.getCurrentLevel()-1;
 		int x = 10;
+		int numHitTarget = levels[i].getHitToBreakTarget();
 		Target target;
+		
 		
 		for(int j = 0 ; j < (levels[i].getNumberOfTargets() - levels[i].getHaveMovingTarget()) ; j++){
 			switch (i) {
@@ -234,29 +286,46 @@ setLayout(null);
 			
 			if (j == 0){//for first target
 				if(j == levels[i].getGunBonus()-1){
-					target = new Target(10,100,fireTargetImageStr);
+					if(numHitTarget > 1)
+						target = new Target(10,100,hardTargetImageStr);
+					else
+						target = new Target(10,100,fireTargetImageStr);
 					target.setTargetType(Sides.GUN_TARGET);
 				}
 				else{	
-					target = new Target(10,100,targetImageStr);
+					if(numHitTarget > 1)
+						target = new Target(10,100,hardTargetImageStr);
+					else
+						target = new Target(10,100,targetImageStr);
 					target.setTargetType(Sides.NORMAL_TARGET);
 				}
 			}
 			
 			else if(j == (levels[i].getGunBonus()-1)){
-				target = new Target(x,100,fireTargetImageStr);
+				if(numHitTarget > 1)
+					target = new Target(x,100,hardTargetImageStr);
+				else
+					target = new Target(x,100,fireTargetImageStr);
 				target.setTargetType(Sides.GUN_TARGET);
 			}
 			else {
-				target = new Target(x,100,targetImageStr);
+				if(numHitTarget > 1)
+					target = new Target(x,100,hardTargetImageStr);
+				else
+					target = new Target(x,100,targetImageStr);
 				target.setTargetType(Sides.NORMAL_TARGET);
 			}
 				target.setAlive(true);
 				target.setHit(false);
+				target.setNumberOfHit(numHitTarget);
 				targets.add(target);
+				
 			}
-		if(levels[i].getHaveMovingTarget() == 1){
-			target = new Target(10,150,targetImageStr);
+		if(levels[i].getHaveMovingTarget() == 1){//For moving target
+			if(numHitTarget > 1)
+				target = new Target(10,150,hardTargetImageStr);
+			else
+				target = new Target(10,150,targetImageStr);
 			target.setMoving(true);
 			target.setTargetType(Sides.MOVING_TARGET);
 			target.setAlive(true);
@@ -291,5 +360,16 @@ setLayout(null);
 			p.keyPressed(e);
 			
 		}
+	}
+	public static String getTargetimagestr() {
+		return targetImageStr;
+	}
+
+	public static String getHardtargetimagestr() {
+		return hardTargetImageStr;
+	}
+
+	public static String getFiretargetimagestr() {
+		return fireTargetImageStr;
 	}
 }

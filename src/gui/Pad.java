@@ -18,7 +18,12 @@ public class Pad {
 	}
 	
 	public void move(){
-		x=x+dx;
+		if(x <= 810 && x > 2)
+			x=x+dx;
+		else if(x >= 810 && dx < 0)
+			x=x+dx;
+		else if (x <= 3 && dx > 0)
+			x=x+dx;
 		y=y+dy;
 	}
 	
@@ -42,7 +47,7 @@ public class Pad {
 		
 		if(key==KeyEvent.VK_LEFT){
 			
-			if(getX()>=5)
+			if(getX()>2)
 				dx=-1;
 			else
 				dx=0;
@@ -76,7 +81,7 @@ public class Pad {
 			dy=0;
 			
 		if(key==KeyEvent.VK_DOWN);
-		setFire(Sides.STOP_FIRE);
+			setFire(Sides.STOP_FIRE);
 	
 	}
 
@@ -94,5 +99,10 @@ public class Pad {
 
 	public void setFire(Sides fire) {
 		this.fire = fire;
+	}
+	
+	public void resetPad(){
+		x=450;
+		y=540;
 	}
 }

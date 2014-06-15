@@ -11,7 +11,6 @@ public class Target extends ImageIcon {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
 	private static final int RIGHT = 1;
 	private static final int LEFT = -1;
 	private int x,y,direction;
@@ -125,6 +124,7 @@ public class Target extends ImageIcon {
 		newTarget.setAlive(this.isAlive());
 		newTarget.setMoving(this.isMoving());
 		newTarget.setNumberOfHit(this.getNumberOfHit());
+		newTarget.setTargetType(this.getTargetType());
 		return newTarget;
 	}
 
