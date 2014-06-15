@@ -6,30 +6,29 @@ import enums.Sides;
 
 public class Ball{
 	
-	private int x,y,dx,dy=-1,celinf_flag,pad_flag;
+	private int x,y,dx,dy=-1,celing_flag;
 	private GUIBackground g;
 	private Pad p;
-	private Sides currWall=Sides.DOWN,prevWall;
+	private Sides currWall=Sides.DOWN,curr_pad_position=null;
 	
 	public Ball(int x,int y,Pad p,GUIBackground g){
 		this.g=g;
 		this.g.wpanel=884;
+		this.g.hpanel=562;
 		this.p=p;
-		this.x=x;
-		this.y=y;
+		setX(x);
+		setY(y);
 	}
 	
-	public void move(){
+public void move(){
 		
 		if(celingCollision(getX(),getY())){
-		
+			celing_flag=1;
 			if(currWall==Sides.LEFT){
 				dx=1;
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				celinf_flag=1;
-				pad_flag=0;
 				currWall=Sides.DOWN;
 			}
 			
@@ -38,9 +37,39 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				celinf_flag=1;
-				pad_flag=0;
 				currWall=Sides.DOWN;
+			}
+		
+			
+			else if(curr_pad_position==Sides.LEFT_HARD){
+				dx=-2;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+			}
+			
+			else if(curr_pad_position==Sides.LEFT_WEEK){
+				dx=-1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				
+			}
+			
+			else if(curr_pad_position==Sides.RIGHT_WEEK){
+				dx=1;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+			}
+				
+
+			else if(curr_pad_position==Sides.RIGHT_HARD){
+				dx=2;
+				dy=1;
+				x=x+dx;
+				y=y+dy;
+				
 			}
 			
 			else{
@@ -48,8 +77,8 @@ public class Ball{
 				dy=1;
 				x=x+dx;
 				y=y+dy;
-				currWall=Sides.DOWN;
 			}
+		
 		}
 		
 		else if(getX()>g.wpanel){
@@ -65,8 +94,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
-			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.LEFT_HARD;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.LEFT_WEEK){
@@ -74,8 +103,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
-			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.LEFT_WEEK;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.RIGHT_WEEK){
@@ -83,8 +112,8 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
-			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.RIGHT_WEEK;
 		}
 			
 
@@ -93,73 +122,70 @@ public class Ball{
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
-			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.RIGHT_HARD;
 		}
 		
 		else if(padCollision(getX(),getY())==Sides.UP){
 			dx=0;
-			dy*=-1;
+			dy=-1;
 			x=x+dx;
 			y=y+dy;
-			pad_flag=1;
-			celinf_flag=0;
+			celing_flag=0;
+			curr_pad_position=Sides.DOWN;
 		}
-		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
 		
-			//System.out.println(prevWall+" "+currWall+" "+1);
-<<<<<<< HEAD
-			if(celinf_flag==1){
-			System.out.println("celinf_flag"+" "+1);
-=======
-			if(prevWall==Sides.DOWN){
->>>>>>> refs/heads/Ofer
+		
+		else if(wallCollision(getX(), getY())==Sides.LEFT_WEEK){
+			
+			if(celing_flag==1){
 			dx=-1;
 			dy=1;
 			x=x+dx;
 			y=y+dy;	
 			}
 			
-			else{
-<<<<<<< HEAD
-			System.out.println("pad_flag"+" "+1);
+			else {
 			dx=-1;
 			dy=-1;
 			x=x+dx;
 			y=y+dy;
-=======
-			dx = -1;
-			dy = -1;
-			 x = x+dx;
-			 y = y+dy;
->>>>>>> refs/heads/Ofer
 			}
 		}
-			else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
-				//System.out.println(prevWall+" "+currWall+" "+2);
-					
-				if(prevWall==Sides.DOWN){
-				dx=1;
-				dy=1;
-				x=x+dx;
-				y=y+dy;
-				}
-				
-				else{
-				dx = 1;
-				dy = -1;
-				x = x+dx;
-				y = y+dy;
-				}
+		
+		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
+			System.out.println(celing_flag);
+			if(celing_flag==1){
+			dx=1;
+			dy=1;
+			x=x+dx;
+			y=y+dy;
 			}
 			
-			else{
-				x=x+dx;
-				y=y+dy;
+			else  {
+			dx=1;
+			dy=-1;
+			x=x+dx;
+			y=y+dy;
 			}
+		}
+		
+		else{
+		x=x+dx;
+		y=y+dy;
+		}
 	}
-		
-		
+<<<<<<< HEAD
+			
+	public void setX(int x){
+		this.x=x;
+	}
+	
+	public void setY(int y){
+		this.y=y;
+	}
+=======
+>>>>>>> refs/remotes/origin/Ofer
 	
 	public int getX(){
 		return x;
@@ -170,32 +196,48 @@ public class Ball{
 	}
 	
 	public boolean celingCollision(int x,int y){
-		if(y==75 || x==0 || x==g.wpanel)
+<<<<<<< HEAD
+		if(y==75)
+=======
+		if(y==75 || x==0 || x==g.wpanel){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
+>>>>>>> refs/remotes/origin/Ofer
 			return true;
+		}
 		
 		return false;
 	}
 	
 	public Sides padCollision(int x,int y){
 		
-		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14)
+		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_HARD;
+		}
 
 		
-		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14)
+		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_WEEK;
+		}
 		
 		
-		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14)
+		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.UP;
+		}
 		
 		
-		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14)
+		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.RIGHT_WEEK;
+		}
 		
 		
-		else if(x>=p.getX()+52 && x<=p.getX()+65 && y==p.getY()+14)
+		else if(x>=p.getX()+52 && x<=p.getX()+65 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.RIGHT_HARD;
+		}
 		
 		
 		return Sides.DO_NOTHING;
@@ -204,34 +246,84 @@ public class Ball{
 	public Sides wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
+<<<<<<< HEAD
+=======
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			prevWall=currWall;
+>>>>>>> refs/remotes/origin/Ofer
 			currWall=Sides.LEFT;
 			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
+<<<<<<< HEAD
+=======
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			prevWall=currWall;
+>>>>>>> refs/remotes/origin/Ofer
 			currWall=Sides.RIGHT;
 			return Sides.LEFT_WEEK;
 		}
 		
+		else
+			
+		
 		return Sides.DO_NOTHING;
 	}
 	
-	public void targetCollision(ArrayList<Target> targets){
+	public Sides targetCollision(ArrayList<Target> targets){
+		Target removeTarget = null;
+		Target changedColorTarget;
+		Sides targetStatus = Sides.NO_HIT;
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
-					target.setHit(true);
-					target.setAlive(false);
+<<<<<<< HEAD
+					celing_flag=1;
+=======
+					new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
+>>>>>>> refs/remotes/origin/Ofer
+					target.setNumberOfHit(target.getNumberOfHit() - 1);
+					if(target.getNumberOfHit() == 0){
+						target.setHit(true);
+						target.setAlive(false);
+						removeTarget = target;
+						targetStatus = target.getTargetType();
+					}
+					else {
+						removeTarget = target;
+						if(target.getTargetType() == Sides.GUN_TARGET)
+							changedColorTarget = target.changeTargetImage(GUIBackground.getFiretargetimagestr());
+						else
+							changedColorTarget = target.changeTargetImage(GUIBackground.getTargetimagestr());
+						targets.remove(target);
+						targets.add(changedColorTarget);
+					}
 					dy= dy*(-1);
 					dx= dx*(-1);
-					break;
+					if(removeTarget != null)
+						targets.remove(target);
+					return targetStatus;
 				}
 		}
+		return Sides.NO_HIT;
 	}
 	
+	public boolean floorCollision(int y){
+		
+		if(y==g.hpanel)
+			return true;
+		
+		return false;
+	}
 	public Rectangle getRectangle(){
 		return new Rectangle(getX(),getY(),10,10);
+	}
+	
+	public void resetBall(){
+		x=480;
+		y=530;
+		dx=0;
+		dy=-1;
 	}
 }
