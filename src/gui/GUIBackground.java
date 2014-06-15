@@ -140,8 +140,6 @@ public class GUIBackground extends JPanel implements ActionListener{
 		g.drawLine(0,75, wpanel,75);
 		if(p.getStatus() == Sides.NORMAL_PAD)
 			g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
-		
-			g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
 		else
 			g.drawImage(iconmageFirePad.getImage(),p.getX(),p.getY(),null);
 		paintTargets(g);
