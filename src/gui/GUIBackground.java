@@ -62,7 +62,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		wonLabel.setVisible(false);
 		add(wonLabel);
 		time.start();
-		new Game_Time(3,lblTime);
+		new Game_Time(4,lblTime);
 	
 	}
 	
@@ -88,6 +88,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		lblShoots.setForeground(Color.PINK);
 		lblShoots.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		lblShoots.setBounds(469, 46, 106, 31);
+		lblShoots.setText("Shoots: " + Gun.getFireLeft());
 		add(lblShoots);
 		
 		lblTime = new JLabel("Time:\r\n\r\n");
@@ -137,9 +138,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 		//levels[0].setHaveMovingTarget(1);
 		levels[0].setHitToBreakTarget(1);
 		
-		levels[1].setGunBonus(2);
-		levels[1].setNumberOfTargets(10);
-		levels[1].setHitToBreakTarget(2);
+		levels[1].setGunBonus(1);
+		levels[1].setNumberOfTargets(1);
+		levels[1].setHitToBreakTarget(1);
 		
 		levels[2].setGunBonus(6);
 		levels[2].setNumberOfTargets(11);
@@ -168,6 +169,18 @@ public class GUIBackground extends JPanel implements ActionListener{
 		
 		if(lives==1)
 			g.drawImage(iconLives1.getImage(),305,55,null);
+		
+		if(lives == 0 && !Level.isGameOver()){
+			wonLabel.setText("       You Lost!");
+			wonLabel.setVisible(true);
+			levels[Level.getCurrentLevel()-1].setLost(true);
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("itsover.wav").toString())).start();
+		}
+		
+	      if(Game_Time.seconds==0 && Game_Time.minutes == 0){
+	    	  wonLabel.setText("       You Lost!");
+	    	  wonLabel.setVisible(true);
+	      }
 		
 		if(gameStat == Sides.GAME_WON_LEVEL){
 			try {
@@ -231,6 +244,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 			p.setStatus(Sides.FIRE_PAD);
 			Gun.setEnable(true);
 			Gun.setFireLeft(5);
+			lblShoots.setText("Shoots: " + Gun.getFireLeft());
 			for(int i = 0; i < Gun.getFireLeft() ; i++){
 				Gun gun = new Gun(p.getX()+32,p.getY());
 				guns.add(gun);
@@ -258,6 +272,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 					gun.setY(p.getY());
 					gun.setFireStatus(Sides.BOLET_FIRED);
 					Gun.setFireLeft(Gun.getFireLeft()-1);
+					lblShoots.setText("Shoots: " + Gun.getFireLeft());
 					if(Gun.getFireLeft() == 0)
 						p.setStatus(Sides.NORMAL_PAD);
 				}

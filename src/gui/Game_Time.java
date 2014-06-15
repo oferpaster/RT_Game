@@ -8,10 +8,10 @@ import javax.swing.JLabel;
 public class Game_Time {
 	private Timer timer;
 	private JLabel lblTime;
-	private  int seconds=60,minutes;
+	public static int seconds=60,minutes;
 	
 	public Game_Time(int minutes, JLabel lblTime) {
-		this.minutes=minutes;
+		Game_Time.minutes=minutes;
 		this.lblTime=lblTime;
 	    timer = new Timer();
 	    timer.schedule(new RemindTask(),0, 1000);
@@ -23,6 +23,8 @@ public class Game_Time {
 	      if(seconds==0){
 	      seconds=60;
 	      minutes--;
+	      if(minutes == 0)
+	    	  new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("itsover.wav").toString())).start();
 	      }
 	    
 	      seconds--;

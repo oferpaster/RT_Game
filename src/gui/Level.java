@@ -5,7 +5,8 @@ public class Level {
 	private static int currentLevel;
 	private int levelNumber,numberOfTargets,haveMovingTarget;
 	private int gunBonus,gameSpeed,targetsToWin,hitToBreakTarget;
-	private boolean play,won;
+	private boolean play,won,lost;
+	private static boolean gameOver = false;
 	
 	public Level(int levelNumber) {
 		setLevelNumber(levelNumber);
@@ -13,6 +14,7 @@ public class Level {
 		setHaveMovingTarget(0);
 		setHitToBreakTarget(1);
 		setWon(false);
+		setGameOver(false);
 	}
 
 	public int getLevelNumber() {
@@ -99,7 +101,24 @@ public class Level {
 	}
 	
 	public void lost(){
-		new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("game_over.wav").toString())).start();
+		new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("itsover.wav").toString())).start();
+	}
+
+	public boolean isLost() {
+		return lost;
+	}
+
+	public void setLost(boolean lost) {
+		this.lost = lost;
+		setGameOver(lost);
+	}
+
+	public static boolean isGameOver() {
+		return gameOver;
+	}
+
+	public static void setGameOver(boolean gameOver) {
+		Level.gameOver = gameOver;
 	}
 
 }
