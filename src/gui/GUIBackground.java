@@ -24,17 +24,18 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private Pad p;
 	private Ball b;
 	private ArrayList<Target> targets;
-	public int wpanel,hpanel;
+	public int wpanel,hpanel,lives=2;
 	private ImageIcon iconmagepad;
-	private ImageIcon iconmageFirePad;
+	private ImageIcon iconmageFirePad,iconLives;
 	private ArrayList<Gun> guns;
 	private Level[] levels;
 	private JLabel wonLabel;
 	private Sides gameStat;
 	private JLabel lblTime;
 	private JLabel lblLevel; 
+	private JLabel lblLives;
+	private JLabel lblShoots;
 	
-
 	public GUIBackground(int x){}
 	
 	public GUIBackground(){
@@ -42,6 +43,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		guns = new ArrayList<Gun>();
 		iconmagepad=new ImageIcon("src\\gui\\pad.png");
 		iconmageFirePad=new ImageIcon("src\\gui\\FirePad.png");
+		iconLives=new ImageIcon("src\\gui\\heart.png");
 		invokeInItWindow();
 		initilaize();
 		initLevels();
@@ -52,7 +54,6 @@ public class GUIBackground extends JPanel implements ActionListener{
 		setFocusable(true);
 		time=new Timer(5,this);
 		setLayout(null);
-		
 		wonLabel = new JLabel("You won level " + Level.getCurrentLevel());
 		wonLabel.setForeground(UIManager.getColor("ComboBox.selectionBackground"));
 		wonLabel.setFont(new Font("Tahoma", Font.BOLD, 67));
@@ -65,7 +66,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	}
 	
 	public void initilaize(){
-setLayout(null);
+		setLayout(null);
 		
 		lblLevel = new JLabel("Level: 1");
 		lblLevel.setForeground(Color.CYAN);
@@ -157,6 +158,11 @@ setLayout(null);
 	public void paintComponent( Graphics g ){
 		super.paintComponent(g);
 		Sides ballCollisionResult;
+		hpanel=mainpanel.getHeight();
+		wpanel=mainpanel.getWidth();
+		for(int i=0;i<lives;i++)
+			g.drawImage(iconLives.getImage(),258+i+1,46,null);
+		
 		if(gameStat == Sides.GAME_WON_LEVEL){
 			try {
 				Thread.sleep(2000);
@@ -171,8 +177,7 @@ setLayout(null);
 			createTarget();
 			gameStat = Sides.GAME_NORMAL;
 		}
-		hpanel=mainpanel.getHeight();
-		wpanel=mainpanel.getWidth();
+		
 		g.setColor( Color.BLACK );
 		g.drawLine(0,75, wpanel,75);
 		if(b.floorCollision(b.getY())){

@@ -154,7 +154,7 @@ public void move(){
 		}
 		
 		else if(wallCollision(getX(), getY())==Sides.RIGHT_WEEK){
-			System.out.println(celing_flag);
+	
 			if(celing_flag==1){
 			dx=1;
 			dy=1;
@@ -179,6 +179,8 @@ public void move(){
 	public void setX(int x){
 		this.x=x;
 	}
+	
+	public void setY(int y){
 		this.y=y;
 	}
 	public int getX(){
@@ -190,7 +192,7 @@ public void move(){
 	}
 	
 	public boolean celingCollision(int x,int y){
-		if(y==75)
+		if(y==75){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return true;
 		}
@@ -260,6 +262,7 @@ public void move(){
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
+					celing_flag=1;
 					new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 					target.setNumberOfHit(target.getNumberOfHit() - 1);
 					if(target.getNumberOfHit() == 0){
