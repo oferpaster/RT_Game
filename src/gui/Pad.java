@@ -12,8 +12,8 @@ public class Pad {
 	public Pad(){}
 	
 	public Pad(int x,int y){
-		this.x=x;
-	    this.y=y;
+		setX(x);
+		setY(y);
 	    setStatus(Sides.NORMAL_PAD);
 	}
 	
@@ -22,6 +22,13 @@ public class Pad {
 		y=y+dy;
 	}
 	
+	public void setX(int x){
+		this.x=x;
+	}
+	
+	public void setY(int y){
+		this.y=y;
+	}
 	public int getX(){
 		return x;
 	}

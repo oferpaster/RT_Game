@@ -28,6 +28,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private ImageIcon iconmageFirePad;
 	private ArrayList<Gun> guns;
 	private Level[] levels;
+	private JLabel lblLives;
+	private JLabel lblShoots;
+	private JLabel lblTime;
+	private JLabel lblLevel; 
 	
 
 	public GUIBackground(int x){}
@@ -38,6 +42,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		iconmagepad=new ImageIcon("src\\gui\\pad.png");
 		iconmageFirePad=new ImageIcon("src\\gui\\FirePad.png");
 		invokeInItWindow();
+		initilaize();
 		initLevels();
 		createTarget();
 		p=new Pad(450,540);
@@ -46,6 +51,40 @@ public class GUIBackground extends JPanel implements ActionListener{
 		setFocusable(true);
 		time=new Timer(5,this);
 		time.start();
+		new Game_Time(3,lblTime);
+	
+	}
+	
+	public void initilaize(){
+setLayout(null);
+		
+		lblLevel = new JLabel("Level: 1");
+		lblLevel.setForeground(Color.CYAN);
+		lblLevel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLevel.setBounds(37, 46, 106, 31);
+		add(lblLevel);
+		
+		lblLives = new JLabel("Lives:\r\n");
+		lblLives.setHorizontalAlignment(SwingConstants.LEFT);
+		lblLives.setForeground(Color.RED);
+		lblLives.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblLives.setBounds(258, 46, 106, 31);
+		add(lblLives);
+		
+		lblShoots = new JLabel("Shoots:");
+		lblShoots.setHorizontalAlignment(SwingConstants.LEFT);
+		lblShoots.setForeground(Color.PINK);
+		lblShoots.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblShoots.setBounds(469, 46, 106, 31);
+		add(lblShoots);
+		
+		lblTime = new JLabel("Time:\r\n\r\n");
+		lblTime.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTime.setForeground(Color.GREEN);
+		lblTime.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblTime.setBounds(689, 46, 106, 31);
+		add(lblTime);
 	}
 	
 	private void invokeInItWindow(){
@@ -107,9 +146,13 @@ public class GUIBackground extends JPanel implements ActionListener{
 		wpanel=mainpanel.getWidth();
 		g.setColor( Color.BLACK );
 		g.drawLine(0,75, wpanel,75);
+		if(b.floorCollision(b.getY())){
+			b.setX(480);
+			b.setY(530);
+			p.setX(450);
+			p.setY(540);
+		}
 		if(p.getStatus() == Sides.NORMAL_PAD)
-			g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
-		
 			g.drawImage(iconmagepad.getImage(),p.getX(),p.getY(),null);
 		else
 			g.drawImage(iconmageFirePad.getImage(),p.getX(),p.getY(),null);
@@ -249,6 +292,4 @@ public class GUIBackground extends JPanel implements ActionListener{
 			
 		}
 	}
-	
-	
 }
