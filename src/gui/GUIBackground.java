@@ -26,7 +26,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private ArrayList<Target> targets;
 	public int wpanel,hpanel,lives=2;
 	private ImageIcon iconmagepad;
-	private ImageIcon iconmageFirePad,iconLives;
+	private ImageIcon iconmageFirePad,iconLives1,iconLives2;
 	private ArrayList<Gun> guns;
 	private Level[] levels;
 	private JLabel wonLabel;
@@ -43,7 +43,8 @@ public class GUIBackground extends JPanel implements ActionListener{
 		guns = new ArrayList<Gun>();
 		iconmagepad=new ImageIcon("src\\gui\\pad.png");
 		iconmageFirePad=new ImageIcon("src\\gui\\FirePad.png");
-		iconLives=new ImageIcon("src\\gui\\heart.png");
+		iconLives1=new ImageIcon("src\\gui\\heart.png");
+		iconLives2=new ImageIcon("src\\gui\\heart.png");
 		invokeInItWindow();
 		initilaize();
 		initLevels();
@@ -160,8 +161,13 @@ public class GUIBackground extends JPanel implements ActionListener{
 		Sides ballCollisionResult;
 		hpanel=mainpanel.getHeight();
 		wpanel=mainpanel.getWidth();
-		for(int i=0;i<lives;i++)
-			g.drawImage(iconLives.getImage(),258+i+1,46,null);
+		if(lives==2){
+		g.drawImage(iconLives1.getImage(),305,57,null);
+		g.drawImage(iconLives2.getImage(),320,57,null);
+		}
+		
+		if(lives==1)
+			g.drawImage(iconLives1.getImage(),305,55,null);
 		
 		if(gameStat == Sides.GAME_WON_LEVEL){
 			try {
@@ -169,6 +175,12 @@ public class GUIBackground extends JPanel implements ActionListener{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			if(Level.getCurrentLevel()==2)
+				new Game_Time(4,lblTime);
+			
+			if(Level.getCurrentLevel()==2)
+				new Game_Time(5,lblTime);
 			
 			wonLabel.setVisible(false);
 			Level.setCurrentLevel(Level.getCurrentLevel() + 1);

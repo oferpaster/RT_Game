@@ -292,8 +292,10 @@ public void move(){
 	
 	public boolean floorCollision(int y){
 		
-		if(y==g.hpanel)
-			return true;
+		if(y==g.hpanel){
+		g.lives--;
+		return true;
+		}
 		
 		return false;
 	}

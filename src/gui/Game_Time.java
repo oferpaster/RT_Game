@@ -31,7 +31,7 @@ public class Game_Time {
 	    
 	    public void writeTime(){
 	    	if(seconds/10==0)
-		    	  lblTime.setToolTipText("Time:"+" "+minutes+":"+"0"+"seconds");
+		    	  lblTime.setText("Time:"+" "+minutes+":"+"0"+seconds);
 		      
 		     else
 		    	 lblTime.setText("Time:"+" "+minutes+":"+seconds); 
