@@ -24,6 +24,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private Timer time;
 	private Pad p;
 	private Ball b;
+	private Game_Time game_time;
 	private ArrayList<Target> targets;
 	public int wpanel,hpanel,lives=2;
 	private ImageIcon iconmagepad;
@@ -63,7 +64,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		wonLabel.setVisible(false);
 		add(wonLabel);
 		time.start();
-		new Game_Time(4,lblTime);
+		game_time=new Game_Time(3,lblTime);
 	
 	}
 	
@@ -140,7 +141,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		levels[0].setHitToBreakTarget(1);
 		
 		levels[1].setGunBonus(2);
-		levels[1].setNumberOfTargets(10);
+		levels[1].setNumberOfTargets(1);
 		levels[1].setHitToBreakTarget(1);
 		
 		levels[2].setGunBonus(6);
@@ -189,19 +190,25 @@ public class GUIBackground extends JPanel implements ActionListener{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			if(Level.getCurrentLevel()==2)
-				new Game_Time(4,lblTime);
-			
-			if(Level.getCurrentLevel()==2)
-				new Game_Time(5,lblTime);
-			
+		
 			wonLabel.setVisible(false);
 			Level.setCurrentLevel(Level.getCurrentLevel() + 1);
 			levels[Level.getCurrentLevel()-1].setPlay(true);
 			targets.clear();
 			createTarget();
 			gameStat = Sides.GAME_NORMAL;
+			
+			if(Level.getCurrentLevel()==2){
+				game_time.timer.cancel();
+				game_time=null;
+				game_time=new Game_Time(4,lblTime);
+			}
+			
+			if(Level.getCurrentLevel()==3){
+				game_time.timer.cancel();
+				game_time=null;
+				game_time=new Game_Time(5,lblTime);
+			}
 		}
 		
 		g.setColor( Color.BLACK );
