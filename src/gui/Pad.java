@@ -1,20 +1,29 @@
 package gui;
 
 import java.awt.event.KeyEvent;
+import enums.Sides;
 
 public class Pad {
 	
 	private int x,dx,y,dy;
+	private Sides status,fire;
+	
 	
 	public Pad(){}
 	
 	public Pad(int x,int y){
 		this.x=x;
 	    this.y=y;
+	    setStatus(Sides.NORMAL_PAD);
 	}
 	
 	public void move(){
-		x=x+dx;
+		if(x <= 810 && x > 2)
+			x=x+dx;
+		else if(x >= 810 && dx < 0)
+			x=x+dx;
+		else if (x <= 3 && dx > 0)
+			x=x+dx;
 		y=y+dy;
 	}
 	
@@ -31,7 +40,7 @@ public class Pad {
 		
 		if(key==KeyEvent.VK_LEFT){
 			
-			if(getX()>=5)
+			if(getX()>2)
 				dx=-1;
 			else
 				dx=0;
@@ -45,6 +54,9 @@ public class Pad {
 			
 			else
 				dx=0;
+		}
+		if(key == KeyEvent.VK_UP){
+			setFire(Sides.PAD_FIRE);
 		}
 			
 	}
@@ -62,7 +74,28 @@ public class Pad {
 			dy=0;
 			
 		if(key==KeyEvent.VK_DOWN);
-			dy=0;
+			setFire(Sides.STOP_FIRE);
 	
+	}
+
+	public Sides getStatus() {
+		return status;
+	}
+
+	public void setStatus(Sides status) {
+		this.status = status;
+	}
+
+	public Sides getFire() {
+		return fire;
+	}
+
+	public void setFire(Sides fire) {
+		this.fire = fire;
+	}
+	
+	public void resetPad(){
+		x=450;
+		y=540;
 	}
 }
