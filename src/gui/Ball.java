@@ -147,9 +147,6 @@ public void move(){
 		y=y+dy;
 		}
 	}
-			
-		
-		
 	
 	public int getX(){
 		return x;
@@ -160,32 +157,44 @@ public void move(){
 	}
 	
 	public boolean celingCollision(int x,int y){
-		if(y==75 || x==0 || x==g.wpanel)
+		if(y==75 || x==0 || x==g.wpanel){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return true;
+		}
 		
 		return false;
 	}
 	
 	public Sides padCollision(int x,int y){
 		
-		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14)
+		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_HARD;
+		}
 
 		
-		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14)
+		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_WEEK;
+		}
 		
 		
-		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14)
+		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.UP;
+		}
 		
 		
-		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14)
+		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.RIGHT_WEEK;
+		}
 		
 		
-		else if(x>=p.getX()+52 && x<=p.getX()+65 && y==p.getY()+14)
+		else if(x>=p.getX()+52 && x<=p.getX()+65 && y==p.getY()+14){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.RIGHT_HARD;
+		}
 		
 		
 		return Sides.DO_NOTHING;
@@ -194,12 +203,14 @@ public void move(){
 	public Sides wallCollision(int x,int y){
 	
 		if(x==0 && y<=540 && y>=75){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			prevWall=currWall;
 			currWall=Sides.LEFT;
 			return Sides.RIGHT_WEEK;
 		}
 		
 		else if(x==g.wpanel && y<=540 && y>=75){
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			prevWall=currWall;
 			currWall=Sides.RIGHT;
 			return Sides.LEFT_WEEK;
@@ -209,18 +220,33 @@ public void move(){
 	}
 	
 	public Sides targetCollision(ArrayList<Target> targets){
+		Target removeTarget = null;
+		Target changedColorTarget;
+		Sides targetStatus = Sides.NO_HIT;
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
+					new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 					target.setNumberOfHit(target.getNumberOfHit() - 1);
 					if(target.getNumberOfHit() == 0){
 						target.setHit(true);
 						target.setAlive(false);
+						removeTarget = target;
+						targetStatus = target.getTargetType();
+					}
+					else {
+						removeTarget = target;
+						if(target.getTargetType() == Sides.GUN_TARGET)
+							changedColorTarget = target.changeTargetImage(GUIBackground.getFiretargetimagestr());
+						else
+							changedColorTarget = target.changeTargetImage(GUIBackground.getTargetimagestr());
+						targets.remove(target);
+						targets.add(changedColorTarget);
 					}
 					dy= dy*(-1);
 					dx= dx*(-1);
-					Sides targetStatus = target.getTargetType();
-					targets.remove(target);
+					if(removeTarget != null)
+						targets.remove(target);
 					return targetStatus;
 				}
 		}
@@ -229,5 +255,12 @@ public void move(){
 	
 	public Rectangle getRectangle(){
 		return new Rectangle(getX(),getY(),10,10);
+	}
+	
+	public void resetBall(){
+		x=480;
+		y=530;
+		dx=0;
+		dy=-1;
 	}
 }

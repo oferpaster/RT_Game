@@ -97,18 +97,33 @@ public class Gun extends ImageIcon {
 	}
 	
 	public Sides targetCollision(ArrayList<Target> targets){
+		Target removeTarget = null;
+		Target changedColorTarget;
+		Sides targetStatus = Sides.NO_HIT;
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
+					new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 					target.setNumberOfHit(target.getNumberOfHit() - 1);
 					if(target.getNumberOfHit() == 0){
 						target.setHit(true);
 						target.setAlive(false);
+						removeTarget = target;
+						targetStatus = target.getTargetType();
+					}
+					else{
+						removeTarget = target;
+						if(target.getTargetType() == Sides.GUN_TARGET)
+							changedColorTarget = target.changeTargetImage(GUIBackground.getFiretargetimagestr());
+						else
+							changedColorTarget = target.changeTargetImage(GUIBackground.getTargetimagestr());
+						targets.remove(target);
+						targets.add(changedColorTarget);
 					}
 					this.setAlive(false);
 					this.setFireStatus(Sides.BOLET_DONE);
-					Sides targetStatus = target.getTargetType();
-					targets.remove(target);
+					if(removeTarget != null)
+						targets.remove(target);
 					return targetStatus;
 				}
 		}

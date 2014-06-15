@@ -4,13 +4,15 @@ public class Level {
 
 	private static int currentLevel;
 	private int levelNumber,numberOfTargets,haveMovingTarget;
-	private int gunBonus,gameSpeed,targetsToWin;
-	private boolean play;
+	private int gunBonus,gameSpeed,targetsToWin,hitToBreakTarget;
+	private boolean play,won;
 	
 	public Level(int levelNumber) {
 		setLevelNumber(levelNumber);
 		setPlay(false);
 		setHaveMovingTarget(0);
+		setHitToBreakTarget(1);
+		setWon(false);
 	}
 
 	public int getLevelNumber() {
@@ -76,6 +78,28 @@ public class Level {
 
 	public void setHaveMovingTarget(int haveMovingTarget) {
 		this.haveMovingTarget = haveMovingTarget;
+	}
+
+	public int getHitToBreakTarget() {
+		return hitToBreakTarget;
+	}
+
+	public void setHitToBreakTarget(int hitToBreakTarget) {
+		this.hitToBreakTarget = hitToBreakTarget;
+	}
+
+	public boolean isWon() {
+		return won;
+	}
+
+	public void setWon(boolean won) {
+		if(won)
+			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("good.wav").toString())).start();
+		this.won = won;
+	}
+	
+	public void lost(){
+		new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("game_over.wav").toString())).start();
 	}
 
 }
