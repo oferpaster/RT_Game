@@ -6,16 +6,18 @@ import java.util.TimerTask;
 import javax.swing.JLabel;
 
 public class Game_Time {
-	private Timer timer;
+	Timer timer;
 	private JLabel lblTime;
 	private  int seconds=60,minutes;
 	
 	public Game_Time(int minutes, JLabel lblTime) {
 		this.minutes=minutes;
 		this.lblTime=lblTime;
+		lblTime.setText("Time:"+" "+this.minutes+":"+"00");
+		this.minutes--;
 	    timer = new Timer();
 	    timer.schedule(new RemindTask(),0, 1000);
-	    
+	   System.out.println(minutes);
 	}
 
 	class RemindTask extends TimerTask {

@@ -46,6 +46,7 @@ public void move(){
 				dy=1;
 				x=x+dx;
 				y=y+dy;
+				
 			}
 			
 			else if(curr_pad_position==Sides.LEFT_WEEK){
@@ -95,6 +96,7 @@ public void move(){
 			x=x+dx;
 			y=y+dy;
 			celing_flag=0;
+			currWall=Sides.DOWN;
 			curr_pad_position=Sides.LEFT_HARD;
 		}
 		
@@ -104,6 +106,7 @@ public void move(){
 			x=x+dx;
 			y=y+dy;
 			celing_flag=0;
+			currWall=Sides.DOWN;
 			curr_pad_position=Sides.LEFT_WEEK;
 		}
 		
@@ -113,6 +116,7 @@ public void move(){
 			x=x+dx;
 			y=y+dy;
 			celing_flag=0;
+			currWall=Sides.DOWN;
 			curr_pad_position=Sides.RIGHT_WEEK;
 		}
 			
@@ -123,6 +127,7 @@ public void move(){
 			x=x+dx;
 			y=y+dy;
 			celing_flag=0;
+			currWall=Sides.DOWN;
 			curr_pad_position=Sides.RIGHT_HARD;
 		}
 		
@@ -132,6 +137,7 @@ public void move(){
 			x=x+dx;
 			y=y+dy;
 			celing_flag=0;
+			currWall=Sides.DOWN;
 			curr_pad_position=Sides.DOWN;
 		}
 		
@@ -249,9 +255,6 @@ public void move(){
 			return Sides.LEFT_WEEK;
 		}
 		
-		else
-			
-		
 		return Sides.DO_NOTHING;
 	}
 	
@@ -263,6 +266,8 @@ public void move(){
 			if(target.isAlive() && !target.isHit())
 				if(target.getRectangle().intersects(this.getRectangle())){
 					celing_flag=1;
+					currWall=Sides.DOWN;
+					curr_pad_position=null;
 					new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 					target.setNumberOfHit(target.getNumberOfHit() - 1);
 					if(target.getNumberOfHit() == 0){
