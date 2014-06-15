@@ -15,7 +15,7 @@ public class Gun extends ImageIcon {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String bolet = "src\\gui\\bolet.png";
+	
 	private static boolean enable;
 	private static int fireLeft;
 	private int x,y;
@@ -23,11 +23,11 @@ public class Gun extends ImageIcon {
 	private boolean alive;
 	private Sides fireStatus;
 	
-	public Gun(int x, int y) {
-		super(bolet);
+	public Gun(int x, int y, String image) {
+		super(image);
 		setX(x);
 		setY(y);
-		setStrImage(bolet);
+		setStrImage(image);
 		setAlive(true);
 		setFireStatus(Sides.BOLET_LOADED);
 	}
@@ -74,10 +74,6 @@ public class Gun extends ImageIcon {
 
 	public static void setEnable(boolean enable) {
 		Gun.enable = enable;
-	}
-
-	public static String getBolet() {
-		return bolet;
 	}
 
 	public static int getFireLeft() {

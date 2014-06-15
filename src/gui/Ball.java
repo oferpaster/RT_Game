@@ -202,25 +202,25 @@ public void move(){
 	
 	public Sides padCollision(int x,int y){
 		
-		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()+14){
+		if(x>=p.getX() && x<p.getX()+13 && y==p.getY()-7){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_HARD;
 		}
 
 		
-		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()+14){
+		else if(x>=p.getX()+13 && x<p.getX()+26 && y==p.getY()-7){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.LEFT_WEEK;
 		}
 		
 		
-		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()+14){
+		else if(x>=p.getX()+26 && x<p.getX()+39 && y==p.getY()-7){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.UP;
 		}
 		
 		
-		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()+14){
+		else if(x>=p.getX()+39 && x<=p.getX()+52 && y==p.getY()-7){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			return Sides.RIGHT_WEEK;
 		}
@@ -243,7 +243,7 @@ public void move(){
 			return Sides.RIGHT_WEEK;
 		}
 		
-		else if(x==g.wpanel && y<=540 && y>=75){
+		else if(x==g.wpanel-12 && y<=540 && y>=75){
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("blip.wav").toString())).start();
 			currWall=Sides.RIGHT;
 			return Sides.LEFT_WEEK;

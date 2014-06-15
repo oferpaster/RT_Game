@@ -15,9 +15,10 @@ import enums.Sides;
 public class GUIBackground extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
-	private static final String targetImageStr = "src\\gui\\targes.png";
-	private static final String hardTargetImageStr = "src\\gui\\targesHard.png";
-	private static final String fireTargetImageStr = "src\\gui\\targesFire.png";
+	private static final String targetImageStr = "targes.png";
+	private static final String hardTargetImageStr = "targesHard.png";
+	private static final String fireTargetImageStr = "targesFire.png";
+	private static final String bolet = "bolet.png";
 	private JFrame mainframe;
 	private JPanel mainpanel;
 	private Timer time;
@@ -41,10 +42,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 	public GUIBackground(){
 		targets = new ArrayList<Target>();
 		guns = new ArrayList<Gun>();
-		iconmagepad=new ImageIcon("src\\gui\\pad.png");
-		iconmageFirePad=new ImageIcon("src\\gui\\FirePad.png");
-		iconLives1=new ImageIcon("src\\gui\\heart.png");
-		iconLives2=new ImageIcon("src\\gui\\heart.png");
+		iconmagepad=new ImageIcon(this.getClass().getClassLoader().getResource("pad.png").toString().replaceAll("file:/", ""));
+		iconmageFirePad=new ImageIcon(this.getClass().getClassLoader().getResource("FirePad.png").toString().replaceAll("file:/", ""));
+		iconLives1=new ImageIcon(this.getClass().getClassLoader().getResource("heart.png").toString().replaceAll("file:/", ""));
+		iconLives2=new ImageIcon(this.getClass().getClassLoader().getResource("heart.png").toString().replaceAll("file:/", ""));
 		invokeInItWindow();
 		initilaize();
 		initLevels();
@@ -133,13 +134,13 @@ public class GUIBackground extends JPanel implements ActionListener{
 		Level.setCurrentLevel(1);
 		
 		//levels[0].setGunBonus(1);
-		levels[0].setNumberOfTargets(1);
+		levels[0].setNumberOfTargets(9);
 		levels[0].setPlay(true);
 		//levels[0].setHaveMovingTarget(1);
 		levels[0].setHitToBreakTarget(1);
 		
-		levels[1].setGunBonus(1);
-		levels[1].setNumberOfTargets(1);
+		levels[1].setGunBonus(2);
+		levels[1].setNumberOfTargets(10);
 		levels[1].setHitToBreakTarget(1);
 		
 		levels[2].setGunBonus(6);
@@ -246,7 +247,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 			Gun.setFireLeft(5);
 			lblShoots.setText("Shoots: " + Gun.getFireLeft());
 			for(int i = 0; i < Gun.getFireLeft() ; i++){
-				Gun gun = new Gun(p.getX()+32,p.getY());
+				Gun gun = new Gun(p.getX()+32,p.getY(),this.getClass().getClassLoader().getResource(bolet).toString().replaceAll("file:/", ""));
 				guns.add(gun);
 			}
 		}
@@ -317,34 +318,35 @@ public class GUIBackground extends JPanel implements ActionListener{
 			}
 			
 			if (j == 0){//for first target
+				System.out.println(this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 				if(j == levels[i].getGunBonus()-1){
 					if(numHitTarget > 1)
-						target = new Target(10,100,hardTargetImageStr);
+						target = new Target(10,100,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 					else
-						target = new Target(10,100,fireTargetImageStr);
+						target = new Target(10,100,this.getClass().getClassLoader().getResource(fireTargetImageStr).toString().replaceAll("file:/", ""));
 					target.setTargetType(Sides.GUN_TARGET);
 				}
 				else{	
 					if(numHitTarget > 1)
 						target = new Target(10,100,hardTargetImageStr);
 					else
-						target = new Target(10,100,targetImageStr);
+						target = new Target(10,100,this.getClass().getClassLoader().getResource(targetImageStr).toString().replaceAll("file:/", ""));
 					target.setTargetType(Sides.NORMAL_TARGET);
 				}
 			}
 			
 			else if(j == (levels[i].getGunBonus()-1)){
 				if(numHitTarget > 1)
-					target = new Target(x,100,hardTargetImageStr);
+					target = new Target(x,100,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 				else
-					target = new Target(x,100,fireTargetImageStr);
+					target = new Target(x,100,this.getClass().getClassLoader().getResource(fireTargetImageStr).toString().replaceAll("file:/", ""));
 				target.setTargetType(Sides.GUN_TARGET);
 			}
 			else {
 				if(numHitTarget > 1)
-					target = new Target(x,100,hardTargetImageStr);
+					target = new Target(x,100,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 				else
-					target = new Target(x,100,targetImageStr);
+					target = new Target(x,100,this.getClass().getClassLoader().getResource(targetImageStr).toString().replaceAll("file:/", ""));
 				target.setTargetType(Sides.NORMAL_TARGET);
 			}
 				target.setAlive(true);
@@ -355,9 +357,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 			}
 		if(levels[i].getHaveMovingTarget() == 1){//For moving target
 			if(numHitTarget > 1)
-				target = new Target(10,150,hardTargetImageStr);
+				target = new Target(10,150,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 			else
-				target = new Target(10,150,targetImageStr);
+				target = new Target(10,150, this.getClass().getClassLoader().getResource(targetImageStr).toString().replaceAll("file:/", ""));
 			target.setMoving(true);
 			target.setTargetType(Sides.MOVING_TARGET);
 			target.setAlive(true);
