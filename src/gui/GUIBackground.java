@@ -10,7 +10,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import enums.Sides;
-
+/** 
+ * 
+ * 
+ *@author GAL
+ *This class is responsible for the GUI background and for the update of the game's screen.
+ */
 
 public class GUIBackground extends JPanel implements ActionListener{
 	
@@ -39,7 +44,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private JLabel lblShoots;
 	
 	public GUIBackground(int x){}
-	
+	/**
+	 * The constructor of the class, charge on the GUI initialization and to invoke the thread which response for the game's
+	 * screen.
+	 */
 	public GUIBackground(){
 		targets = new ArrayList<Target>();
 		guns = new ArrayList<Gun>();
@@ -68,6 +76,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 	
 	}
 	
+	/**
+	 * This method initializes all the panel's components.
+	 */
 	public void initilaize(){
 		setLayout(null);
 		
@@ -110,6 +121,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 				});
 	}
 	
+	/**
+	 * This method response for the frame creation its components insertion. 
+	 */
 	private void  InItWindow(){
 		mainframe=new JFrame("GAME");
 		mainframe.setPreferredSize(new Dimension(900,600));
@@ -127,6 +141,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 		gameStat = Sides.GAME_NORMAL;
 	}
 	
+	/**
+	 * This method initializes the 3 levels and their features.
+	 */
 	private void initLevels(){
 		levels = new Level[3];
 		levels[0] = new Level(1);
@@ -153,12 +170,18 @@ public class GUIBackground extends JPanel implements ActionListener{
 		
 	}
 	
+	/**
+	 * This method invoke the repaint method which draw the screen every 5 milliseconds.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		p.move();
 		b.move();
 		repaint();
 	}
 	
+	/**
+	 * This method response for the screen painting, recall every 5 milliseconds.
+	 */
 	public void paintComponent( Graphics g ){
 		super.paintComponent(g);
 		Sides ballCollisionResult;
@@ -265,7 +288,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 		}
 	}
 	
-	
+	/**
+	 * This method response for the pad bullets drawing.
+	 * @param g- This is a variable from Graphics type for painting the component.
+	 */
 	private void paintBolet(Graphics g) {
 		Gun gunHit = null;
 		for (Gun gun : guns) {
@@ -300,7 +326,9 @@ public class GUIBackground extends JPanel implements ActionListener{
 		if(gunHit != null)
 			guns.remove(gunHit);
 	}
-
+	/**
+	 * This method response for the targets creating.
+	 */
 	public void createTarget() {
 		int i = Level.getCurrentLevel()-1;
 		int x = 10;
@@ -375,7 +403,10 @@ public class GUIBackground extends JPanel implements ActionListener{
 		}
 	}
 	
-	
+	/**
+	 * This method response for the targets painting.
+	 * @param g
+	 */
 	public void paintTargets(Graphics g) {
 		for (Target target : targets) {
 			if(target.isAlive() && !target.isHit()){
@@ -391,21 +422,39 @@ public class GUIBackground extends JPanel implements ActionListener{
 		}
 	}
 	
+	/**
+	 * 
+	 * @author GAL
+	 *This class response for the key button press and release.
+	 */
 	private class AL extends KeyAdapter{
-		
+		/**
+		 * this method response fir the key button pressing.
+		 */
 		public void keyReleased(KeyEvent e){
 			p.keyReleased(e);
 		}
-		
+		/**
+		 * this method response fir the key button releasing.
+		 */
 		public void keyPressed(KeyEvent e){
 			p.keyPressed(e);
 			
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public static String getTargetimagestr() {
 		return targetImageStr;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public static String getHardtargetimagestr() {
 		return hardTargetImageStr;
 	}
