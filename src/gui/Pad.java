@@ -11,6 +11,7 @@ public class Pad {
 	
 	private int x,dx,y,dy;
 	private Sides status,fire;
+	private boolean play;
 	
 	
 	public Pad(){}
@@ -24,12 +25,15 @@ public class Pad {
 		setX(x);
 		setY(y);
 	    setStatus(Sides.NORMAL_PAD);
+	    setPlay(true);
 	}
 	
 	/**
 	 * This class response update the pad's coordinates.
 	 */
 	public void move(){
+		if(!isPlay())
+			return;
 		if(x <= 810 && x > 2)
 			x=x+dx;
 		else if(x >= 810 && dx < 0)
@@ -77,7 +81,7 @@ public class Pad {
 	public void keyPressed(KeyEvent e){
 		int key=e.getKeyCode(); 	
 		
-		if(key==KeyEvent.VK_LEFT){
+		if(key==KeyEvent.VK_LEFT && isPlay()){
 			
 			if(getX()>2)
 				dx=-1;
@@ -86,7 +90,7 @@ public class Pad {
 		}
 		
 			
-		if(key==KeyEvent.VK_RIGHT){
+		if(key==KeyEvent.VK_RIGHT && isPlay()){
 			
 			if(getX()<=810)
 				dx=1;
@@ -94,7 +98,7 @@ public class Pad {
 			else
 				dx=0;
 		}
-		if(key == KeyEvent.VK_UP){
+		if(key == KeyEvent.VK_UP && isPlay()){
 			setFire(Sides.PAD_FIRE);
 		}
 			
@@ -159,5 +163,13 @@ public class Pad {
 	public void resetPad(){
 		x=450;
 		y=540;
+	}
+
+	public boolean isPlay() {
+		return play;
+	}
+
+	public void setPlay(boolean play) {
+		this.play = play;
 	}
 }

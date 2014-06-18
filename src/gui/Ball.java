@@ -14,6 +14,7 @@ public class Ball{
 	private GUIBackground g;
 	private Pad p;
 	private Sides currWall=Sides.DOWN,curr_pad_position=null;
+	private boolean play;
 	
 	/**
 	 * This is the constructor of the ball's class
@@ -29,13 +30,15 @@ public class Ball{
 		this.p=p;
 		setX(x);
 		setY(y);
+		setPlay(true);
 	}
 	
 	/**
 	 * This method response for the movment of the ball
 	 */
 	public void move(){
-		
+		if(!isPlay())
+			return;
 		if(celingCollision(getX(),getY())){
 			celing_flag=1;
 			if(currWall==Sides.LEFT){
@@ -334,9 +337,9 @@ public class Ball{
 					else {
 						removeTarget = target;
 						if(target.getTargetType() == Sides.GUN_TARGET)
-							changedColorTarget = target.changeTargetImage(GUIBackground.getFiretargetimagestr());
+							changedColorTarget = target.changeTargetImage(this.getClass().getClassLoader().getResource(GUIBackground.getFiretargetimagestr()).toString().replaceAll("file:/", ""));
 						else
-							changedColorTarget = target.changeTargetImage(GUIBackground.getTargetimagestr());
+							changedColorTarget = target.changeTargetImage(this.getClass().getClassLoader().getResource(GUIBackground.getTargetimagestr()).toString().replaceAll("file:/", ""));
 						targets.remove(target);
 						targets.add(changedColorTarget);
 					}
@@ -381,5 +384,13 @@ public class Ball{
 		y=530;
 		dx=0;
 		dy=-1;
+	}
+
+	public boolean isPlay() {
+		return play;
+	}
+
+	public void setPlay(boolean play) {
+		this.play = play;
 	}
 }

@@ -31,7 +31,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private Ball b;
 	private Game_Time game_time;
 	private ArrayList<Target> targets;
-	public int wpanel,hpanel,lives=2;
+	public int wpanel,hpanel,lives=2,score = 0;
 	private ImageIcon iconmagepad;
 	private ImageIcon iconmageFirePad,iconLives1,iconLives2;
 	private ArrayList<Gun> guns;
@@ -42,6 +42,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 	private JLabel lblLevel; 
 	private JLabel lblLives;
 	private JLabel lblShoots;
+	private JLabel lblScore;
 	
 	public GUIBackground(int x){}
 	/**
@@ -73,6 +74,12 @@ public class GUIBackground extends JPanel implements ActionListener{
 		add(wonLabel);
 		time.start();
 		game_time=new Game_Time(3,lblTime);
+		
+		lblScore = new JLabel("Score: " + Level.getCurrentLevel());
+		lblScore.setForeground(new Color(47, 79, 79));
+		lblScore.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblScore.setBounds(394, 11, 89, 19);
+		add(lblScore);
 	
 	}
 	
@@ -151,14 +158,12 @@ public class GUIBackground extends JPanel implements ActionListener{
 		levels[2] = new Level(3);
 		Level.setCurrentLevel(1);
 		
-		//levels[0].setGunBonus(1);
-		levels[0].setNumberOfTargets(9);
+		levels[0].setNumberOfTargets(8);
 		levels[0].setPlay(true);
-		//levels[0].setHaveMovingTarget(1);
 		levels[0].setHitToBreakTarget(1);
 		
 		levels[1].setGunBonus(2);
-		levels[1].setNumberOfTargets(1);
+		levels[1].setNumberOfTargets(9);
 		levels[1].setHitToBreakTarget(1);
 		
 		levels[2].setGunBonus(6);
@@ -187,6 +192,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		Sides ballCollisionResult;
 		hpanel=mainpanel.getHeight();
 		wpanel=mainpanel.getWidth();
+		lblScore.setText("Score: " + score);
 		if(lives==2){
 		g.drawImage(iconLives1.getImage(),305,57,null);
 		g.drawImage(iconLives2.getImage(),320,57,null);
@@ -199,12 +205,16 @@ public class GUIBackground extends JPanel implements ActionListener{
 			wonLabel.setText("       You Lost!");
 			wonLabel.setVisible(true);
 			levels[Level.getCurrentLevel()-1].setLost(true);
+			p.setPlay(false);
+	    	b.setPlay(false);
 			new Thread(new MediaPlayer(this.getClass().getClassLoader().getResource("itsover.wav").toString())).start();
 		}
 		
 	      if(Game_Time.seconds==0 && Game_Time.minutes == 0){
 	    	  wonLabel.setText("       You Lost!");
 	    	  wonLabel.setVisible(true);
+	    	  p.setPlay(false);
+	    	  b.setPlay(false);
 	      }
 		
 		if(gameStat == Sides.GAME_WON_LEVEL){
@@ -253,16 +263,25 @@ public class GUIBackground extends JPanel implements ActionListener{
 		g.drawOval(b.getX(), b.getY(),10, 10);
 		g.fillOval(b.getX(), b.getY(),10, 10);
 		if(ballCollisionResult != Sides.NO_HIT){
+			if(ballCollisionResult == Sides.MOVING_TARGET)
+				score += 30;
+			else if(ballCollisionResult == Sides.NORMAL_TARGET)
+				score += 10;
 			levels[Level.getCurrentLevel()-1].setTargetsToWin(levels[Level.getCurrentLevel()-1].getTargetsToWin() - 1);
 			if(levels[Level.getCurrentLevel()-1].getTargetsToWin() == 0 && Level.getCurrentLevel() != 3){
 				levels[Level.getCurrentLevel()-1].setPlay(false);
 				levels[Level.getCurrentLevel()-1].setWon(true);
 				if(Level.getCurrentLevel() != 3)
 					wonLabel.setText("You won level " + Level.getCurrentLevel());
-				else
+				else{
 					wonLabel.setText("You Won The Game!");
+					b.setPlay(false);
+					p.setPlay(false);
+				}
 				wonLabel.setVisible(true);
 				gameStat = Sides.GAME_WON_LEVEL;
+				score += 100;
+				lblLevel.setText("Level" + (Level.getCurrentLevel() + 1));
 				b.resetBall();
 				p.resetPad();
 			}
@@ -272,6 +291,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 			}
 		}
 		if(ballCollisionResult == Sides.GUN_TARGET){
+			score += 20;
 			p.setStatus(Sides.FIRE_PAD);
 			Gun.setEnable(true);
 			Gun.setFireLeft(5);
@@ -339,7 +359,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 		for(int j = 0 ; j < (levels[i].getNumberOfTargets() - levels[i].getHaveMovingTarget()) ; j++){
 			switch (i) {
 			case 0:
-				x = j*130;
+				x = j*115;
 				break;
 			case 1:
 				x = j*101;
@@ -351,9 +371,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 			default:
 				break;
 			}
-			
 			if (j == 0){//for first target
-				System.out.println(this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 				if(j == levels[i].getGunBonus()-1){
 					if(numHitTarget > 1)
 						target = new Target(10,100,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
@@ -363,7 +381,7 @@ public class GUIBackground extends JPanel implements ActionListener{
 				}
 				else{	
 					if(numHitTarget > 1)
-						target = new Target(10,100,hardTargetImageStr);
+						target = new Target(10,100,this.getClass().getClassLoader().getResource(hardTargetImageStr).toString().replaceAll("file:/", ""));
 					else
 						target = new Target(10,100,this.getClass().getClassLoader().getResource(targetImageStr).toString().replaceAll("file:/", ""));
 					target.setTargetType(Sides.NORMAL_TARGET);
