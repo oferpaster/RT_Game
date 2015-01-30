@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>gui</name>
+			<type>2</type>
+			<location>C:/Users/GAL/git/RT_Game2/src/gui</location>
+		</link>
+	</linkedResources>
 </projectDescription>
